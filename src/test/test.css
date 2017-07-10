@@ -1,0 +1,4 @@
+@import "test2.css";
+:fullscreen a {
+    display: flex
+}
