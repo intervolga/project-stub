@@ -1,10 +1,10 @@
 {
-  "author": "",
-  "name": "bem-project-stub",
-  "version": "2.0.0",
+  "author": "Shkarupa Alex",
+  "name": "webpack-project-stub",
+  "version": "1.0.0",
   "repository": {
     "type": "git",
-    "url": "git://github.com/bem/project-stub.git"
+    "url": "git://github.com/shkarupa-alex/webpack-project-stub"
   },
   "engines": {
     "node": ">=7"
