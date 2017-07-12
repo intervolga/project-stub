@@ -1,3 +1,7 @@
 .test-include-css {
     display: flex;
 }
+
+.abc {
+    background: yellow;
+}

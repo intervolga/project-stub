@@ -3,7 +3,10 @@ const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
 
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ProvidePlugin = require('webpack').ProvidePlugin;
 
 const srcPath = path.resolve(__dirname, 'src');
@@ -12,7 +15,7 @@ const entries = fs.readdirSync(srcPath)
     return /\.js$/i.test(file);
   }).map((file) => {
     return path.join(srcPath, file);
-  }).reduce(function (res, curr) {
+  }).reduce(function(res, curr) {
     const key = path.basename(curr, '.js');
     res[key] = curr;
     return res;
@@ -33,11 +36,11 @@ const techMap = {
 };
 
 
-module.exports = {
+const config = {
   entry: entries,
   output: {
     path: path.resolve(__dirname, isProd ? 'dist' : 'build'),
-    filename: isProd ? 'bundle.js' : '[name].bundle.js',
+    filename: '[name].bundle.js',
   },
   devtool: isProd ? 'source-map' : 'cheap-eval-source-map',
   module: {
@@ -67,8 +70,8 @@ module.exports = {
               loader: 'css-loader',
               options: {
                 importLoaders: 1,
-                // minimize
-                // sourceMap
+                minimize: false,
+                sourceMap: false,
               },
             },
             'postcss-loader',
@@ -83,7 +86,8 @@ module.exports = {
             {
               loader: 'css-loader',
               options: {
-                // sourceMap
+                minimize: false,
+                sourceMap: false,
               },
             },
             'postcss-loader',
@@ -123,66 +127,82 @@ module.exports = {
       }],
   },
   plugins: [
+    new CleanWebpackPlugin(['dist', 'build']),
+    new webpack.DefinePlugin({
+      'process.env': {
+        'NODE_ENV': JSON.stringify(isProd ? 'production' : 'development'),
+      },
+    }),
     new webpack.ProvidePlugin({
       '$': 'jquery',
       'jQuery': 'jquery',
       'window.jQuery': 'jquery',
       'windows.jQuery': 'jquery',
-      //TODO: modules
+      'modules': 'ym',
     }),
     new ExtractTextPlugin({
       filename: 'bundle.css',
       disable: !isProd,
     }),
-    // new webpack.LoaderOptionsPlugin({
-    //   minimize: true,
-    //   debug: false
-    // }),
-    // new webpack.optimize.UglifyJsPlugin({
-    //   sourceMap: options.devtool && (options.devtool.indexOf("sourcemap") >= 0 || options.devtool.indexOf("source-map") >= 0)
-    // })
-    new webpack.DefinePlugin({
-      'process.env': {
-        'NODE_ENV': isProd ? 'production' : 'development',
-      },
-    }),
 
-
-    // new webpack.optimize.UglifyJsPlugin({
-    //   beautify: false,
-    //   mangle: {
-    //     screw_ie8: true,
-    //     keep_fnames: true,
-    //   },
-    //   compress: {
-    //     screw_ie8: true,
-    //   },
-    //   comments: false,
-    // }),
-    // new ProvidePlugin({
-    //   $: 'jquery',
-    //   jQuery: 'jquery',
-    //   'window.jQuery': 'jquery',
-    //   'windows.jQuery': 'jquery',
-    // }),
-
-    // new webpack.optimize.CommonsChunkPlugin({
-    //   name: ['polyfills', 'vendor'].reverse()
-    // }),
-    //
     // new HtmlWebpackPlugin({
-    //   template: 'src/index.html',
-    //   chunksSortMode: 'dependency'
-    // })
+    //   template: 'build/index.html',
+    // }),
+
     // new DashboardPlugin(),
     // new webpack.HotModuleReplacementPlugin(),
   ],
-  // devServer: {
-  //   port: 7777,
-  //   host: 'localhost',
-  //   historyApiFallback: true,
-  //   noInfo: false,
-  //   stats: 'minimal',
-  //   publicPath: publicPath
-  // },
+  devServer: {
+    // contentBase: path.resolve(__dirname, isProd ? 'dist' : 'build'),
+    port: 8080,
+    host: 'localhost',
+    // historyApiFallback: true,
+    // noInfo: false,
+    // stats: 'minimal',
+    // publicPath: publicPath
+    // lazy: true,
+    // hot: true
+    // overlay: {
+    //   warnings: true,
+    //   errors: true
+    // },
+    // watchContentBase: true
+    // watchOptions: {
+    //   poll: true
+    // }
+  },
 };
+
+if (isProd) {
+  config.plugins = config.plugins.concat([
+    new webpack.LoaderOptionsPlugin({
+      minimize: isProd,
+      debug: !isProd,
+    }),
+    // new webpack.optimize.CommonsChunkPlugin({}),
+    new webpack.optimize.UglifyJsPlugin({
+      sourceMap: true,
+      // comments: /^\**!|@preserve|@license|@cc_on/,
+      // beautify: false,
+      // semicolons: true,
+      // shebang: true,
+      // mangle: {
+      //   screw_ie8: true,
+      //   keep_fnames: true,
+      // },
+      // compress: {
+      //   screw_ie8: true,
+      // },
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'common',
+      filename: 'bundle.js',
+    }),
+    // new OptimizeCssAssetsPlugin({
+    //   cssProcessor: require('cssnano'),
+    //   cssProcessorOptions: {preset: 'default'},
+    // }),
+  ]);
+}
+
+module.exports = config;
