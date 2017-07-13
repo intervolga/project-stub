@@ -65,12 +65,13 @@
     "webpack-dev-middleware": "^1.11.0",
     "webpack-dev-server": "^2.5.1",
     "webpack-merge": "^4.1.0",
-    "ym": "^0.1.2"
+    "ym": "^0.1.2",
+    "ymodules-loader": "^1.0.2"
   },
   "scripts": {
     "dev:build": "cross-env NODE_ENV=develop webpack --colors",
-    "dev:watch": "cross-env NODE_ENV=develop webpack-dev-server --open",
-    "dev:prof": "cross-env NODE_ENV=develop webpack --profile --colors",
+    "dev:watch": "cross-env NODE_ENV=develop webpack-dev-server --watch",
+    "dev:prof": "cross-env NODE_ENV=develop webpack --profile --colors --json > stats.json",
     "prod:build": "cross-env NODE_ENV=production webpack --progress --colors",
     "ds": "cross-env NODE_ENV=develop webpack-dev-server --open"
   },

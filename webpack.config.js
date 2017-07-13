@@ -31,7 +31,7 @@ const levels = [
 ];
 const techMap = {
   styles: ['css', 'scss'],
-  scripts: ['js'],
+  scripts: ['vanilla.js', 'js', 'browser.js'],
   html: ['bh.js'],
 };
 
@@ -42,7 +42,7 @@ const config = {
     path: path.resolve(__dirname, isProd ? 'dist' : 'build'),
     filename: '[name].bundle.js',
   },
-  devtool: isProd ? 'source-map' : 'cheap-eval-source-map',
+  // devtool: isProd ? 'source-map' : 'cheap-eval-source-map',
   module: {
     rules: [
       {
@@ -124,6 +124,10 @@ const config = {
           },
           'intervolga-bemjson-loader?stringify=false',
         ],
+      },
+      {
+        test: /\.js$/,
+        loader: 'ymodules-loader',
       }],
   },
   plugins: [
@@ -134,11 +138,11 @@ const config = {
       },
     }),
     new webpack.ProvidePlugin({
-      '$': 'jquery',
-      'jQuery': 'jquery',
-      'window.jQuery': 'jquery',
-      'windows.jQuery': 'jquery',
-      'modules': 'ym',
+      // '$': 'jquery',
+      // 'jQuery': 'jquery',
+      // 'window.jQuery': 'jquery',
+      // 'windows.jQuery': 'jquery',
+      // 'modules': 'ym',
     }),
     new ExtractTextPlugin({
       filename: 'bundle.css',
@@ -153,7 +157,7 @@ const config = {
     // new webpack.HotModuleReplacementPlugin(),
   ],
   devServer: {
-    // contentBase: path.resolve(__dirname, isProd ? 'dist' : 'build'),
+    contentBase: path.resolve(__dirname, isProd ? 'dist' : 'build'),
     port: 8080,
     host: 'localhost',
     // historyApiFallback: true,
@@ -176,8 +180,8 @@ const config = {
 if (isProd) {
   config.plugins = config.plugins.concat([
     new webpack.LoaderOptionsPlugin({
-      minimize: isProd,
-      debug: !isProd,
+      minimize: true,
+      debug: false,
     }),
     // new webpack.optimize.CommonsChunkPlugin({}),
     new webpack.optimize.UglifyJsPlugin({
@@ -199,8 +203,10 @@ if (isProd) {
       filename: 'bundle.js',
     }),
     // new OptimizeCssAssetsPlugin({
-    //   cssProcessor: require('cssnano'),
-    //   cssProcessorOptions: {preset: 'default'},
+    //   cssProcessor: require('cssnano')({
+    //     preset: 'default',
+    //   }),
+    //   // cssProcessorOptions: {preset: 'default'},
     // }),
   ]);
 }
