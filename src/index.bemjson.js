@@ -10,6 +10,7 @@ module.exports = {
     scripts: [{ elem: 'js', url: 'index.bemjson.bundle.js' }],
     mods: { theme: 'islands' },
     content: [
+        {block: 'p', content:'p-block12'},
         {
             block: 'header',
             content: [
