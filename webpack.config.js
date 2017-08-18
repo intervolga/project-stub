@@ -1,15 +1,22 @@
-const isProd = 'production' === process.env.NODE_ENV;
 const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
-const package = require('./package.json');
-
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const OptimizeCssnanoPlugin = require('@intervolga/optimize-cssnano-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ProvidePlugin = require('webpack').ProvidePlugin;
+const HtmlWebpackAssetTemplatePlugin =
+  require('@intervolga/html-webpack-asset-template-plugin');
+const HtmlIndexPlugin = require('@intervolga/html-index-plugin');
+const ImageminPlugin = require('imagemin-webpack-plugin').default;
+const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
+const PreloadWebpackPlugin = require('preload-webpack-plugin');
+const pkg = require('./package.json');
 
+const isProd = 'production' === process.env.NODE_ENV;
+
+// Read source directory and gerate entry points object
 const srcPath = path.resolve(__dirname, 'src');
 const entries = fs.readdirSync(srcPath)
   .filter((file) => {
@@ -17,41 +24,88 @@ const entries = fs.readdirSync(srcPath)
   }).map((file) => {
     return path.join(srcPath, file);
   }).reduce(function(res, curr) {
-    const key = path.basename(curr, '.js');
-    res[key] = curr;
+    if (isProd) {
+      res['dist'] = res['dist'] || [];
+      res['dist'].push(curr);
+    } else {
+      const key = path.basename(curr, '.js');
+      res[key] = curr;
+    }
+
     return res;
   }, {});
 
-
-const config = {
+module.exports = {
   entry: entries,
+
   output: {
-    // context: '/.../src'
     path: path.resolve(__dirname, isProd ? 'dist' : 'build'),
     filename: '[name].bundle.js',
   },
+
   devtool: isProd ? 'source-map' : 'cheap-source-map',
-  // 'cheap-eval-source-map'
+
   module: {
     rules: [
       {
-        test: /\.(ttf|eot)(\?v=[\d+\.]+)?$/,
+        test: /\.(ttf|eot|woff)(\?v=[\d+\.]+)?$/,
+        include: /\/node_modules\//,
         loader: 'file-loader',
-        // options: {
-        //   name: 'assets/[path][name].[ext]',
-        // },
+        options: {name: 'assets/[1]', regExp: /node_modules\/(.*)/},
       },
       {
-        test: /\.woff2?(\?v=[\d+\.]+)?$/,
-        loader: 'url-loader?limit=4096',
+        test: /\.woff2(\?v=[\d+\.]+)?$/,
+        include: /\/node_modules\//,
+        loader: 'url-loader',
+        options: {
+          name: 'assets/[1]',
+          regExp: /node_modules\/(.*)/,
+          limit: 4096,
+        },
       },
       {
         test: /\.svg(\?v=[\d+\.]+)?$/,
-        loader: 'svg-url-loader?limit=4096',
+        include: /\/node_modules\//,
+        loader: 'svg-url-loader',
+        options: {
+          name: 'assets/[1]',
+          regExp: /node_modules\/(.*)/,
+          limit: 4096,
+        },
       },
       {
         test: /\.(jpe?g|png|gif)$/,
-        loader: 'url-loader?limit=4096',
+        include: /\/node_modules\//,
+        loader: 'url-loader',
+        options: {
+          name: 'assets/[1].[ext]',
+          regExp: /node_modules\/(.*)/,
+          limit: 4096,
+        },
+      },
+      {
+        test: /\.(ttf|eot|woff)(\?v=[\d+\.]+)?$/,
+        exclude: /\/node_modules\//,
+        loader: 'file-loader',
+        options: {name: 'assets/[path][name].[ext]'},
+      },
+      {
+        test: /\.woff2(\?v=[\d+\.]+)?$/,
+        exclude: /\/node_modules\//,
+        loader: 'url-loader',
+        options: {name: 'assets/[path][name].[ext]', limit: 4096},
+      },
+      {
+        test: /\.svg(\?v=[\d+\.]+)?$/,
+        exclude: /\/node_modules\//,
+        loader: 'svg-url-loader',
+        options: {name: 'assets/[path][name].[ext]', limit: 4096},
+      },
+      {
+        test: /\.(jpe?g|png|gif)$/,
+        exclude: /\/node_modules\//,
+        loader: 'url-loader',
+        options: {name: 'assets/[path][name].[ext]', limit: 4096},
       },
       {
         test: /\.css$/,
@@ -60,13 +114,12 @@ const config = {
           use: [
             {
               loader: 'css-loader',
-              options: {
-                importLoaders: 1,
-                minimize: isProd,
-                sourceMap: isProd,
-              },
+              options: {importLoaders: 1, minimize: isProd, sourceMap: isProd},
             },
-            'postcss-loader',
+            {
+              loader: 'postcss-loader',
+              options: {sourceMap: false},
+            },
           ],
         }),
       },
@@ -77,17 +130,18 @@ const config = {
           use: [
             {
               loader: 'css-loader',
-              options: {
-                minimize: isProd,
-                sourceMap: isProd,
-              },
+              options: {minimize: isProd, sourceMap: isProd},
             },
-            'postcss-loader',
+            {
+              loader: 'postcss-loader',
+              options: {sourceMap: isProd},
+            },
             {
               loader: 'sass-loader',
               options: {
+                outputStyle: 'expanded',
                 // includePaths: ['absolute/path/a', 'absolute/path/b']
-                // sourceMap
+                sourceMap: isProd,
               },
             },
           ],
@@ -97,167 +151,129 @@ const config = {
         test: /\.bemjson\.js$/,
         use: [
           '@intervolga/bemrequire-loader',
-          '@intervolga/bembh-loader?stringify=false',
-          {
-            loader: '@intervolga/bemfs-loader',
-            options: {
-              levels: package.bemlevels,
-              techMap: package.bemtechs,
-              stringify: false,
-            },
-          },
+          '@intervolga/bembh-loader',
           {
             loader: '@intervolga/bemdeps-loader',
             options: {
-              levels: package.bemlevels,
-              techMap: package.bemtechs,
-              stringify: false,
+              levels: pkg.bemLevels,
+              techMap: pkg.bemTechs,
+              bhFilename: path.resolve(path.join('lib', 'bh.js')),
             },
           },
-          '@intervolga/bemjson-loader?stringify=false',
+          {
+            loader: '@intervolga/bemdecl-loader',
+            options: {levels: pkg.bemLevels},
+          },
+          '@intervolga/bemjson-loader',
+          '@intervolga/eval-loader',
         ],
       },
-      // {
-      //   test: /\.js$/,
-      //   loader: 'ymodules-loader',
-      //   exclude: srcPath,
-      // },
-      // {
-      //   test: /\.jsx?$/,
-      //   include: srcPath,
-      //   loader: 'babel-loader',
-      //   options: {
-      //     // https://github.com/babel/babel-loader#options
-      //     cacheDirectory: !isProd,
-      //
-      //     // https://babeljs.io/docs/usage/options/
-      //     babelrc: false,
-      //     presets: [
-      //       // A Babel preset that can automatically determine the
-      //       // Babel plugins and polyfills
-      //       // https://github.com/babel/babel-preset-env
-      //       ['env', {
-      //         targets: {
-      //           browsers: package.browserslist,
-      //           uglify: true,
-      //         },
-      //         modules: false,
-      //         useBuiltIns: false,
-      //         debug: false,
-      //       }],
-      //       // Experimental ECMAScript proposals
-      //       // https://babeljs.io/docs/plugins/#presets-stage-x-experimental-presets-
-      //       'stage-2',
-      //       // JSX, Flow
-      //       // https://github.com/babel/babel/tree/master/packages/babel-preset-react
-      //       'react',
-      //       // Optimize React code for the production build
-      //       // https://github.com/thejameskyle/babel-react-optimize
-      //       // TODO: ...isDebug ? [] : ['react-optimize'],
-      //     ],
-      //     plugins: [
-      //       // Adds component stack to warning messages
-      //       // https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-react-jsx-source
-      //       // TODO: ...isDebug ? ['transform-react-jsx-source'] : [],
-      //       // Adds __self attribute to JSX which React will use for some warnings
-      //       // https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-react-jsx-self
-      //       // TODO: ...isDebug ? ['transform-react-jsx-self'] : [],
-      //     ],
-      //   },
-      // },
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: 'eslint-loader',
+      },
     ],
+
     noParse: [
-      /\/node_modules\/jquery\/dist\/jquery\.js/,
+      /\/node_modules\/jquery\/dist\/jquery\.min\.js/,
     ],
   },
-  // externals: {
-  //   jquery: 'jQuery',
-  // },
+
   plugins: [
+    // Common plugins
     new CleanWebpackPlugin(['dist', 'build']),
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.DefinePlugin({
-      'process.env': {
-        'NODE_ENV': JSON.stringify(isProd ? 'production' : 'development'),
-      },
       'NODE_ENV': JSON.stringify(isProd ? 'production' : 'development'),
       'LANG': JSON.stringify('ru'),
     }),
     new webpack.ProvidePlugin({
-      '$': 'jquery',
-      'jQuery': 'jquery',
-      'window.jQuery': 'jquery',
-      'windows.jQuery': 'jquery',
+      '$': 'jquery/dist/jquery.min.js',
+      'jQuery': 'jquery/dist/jquery.min.js',
       'modules': 'ym',
     }),
     new ExtractTextPlugin({
-      // allChunks: true,
-      filename: 'bundle.css',
+      allChunks: true,
+      filename: '[name].bundle.css',
       disable: !isProd,
     }),
+    new HtmlWebpackPlugin({
+      chunks: [isProd ? 'dist' : 'index.bemjson'],
+      filename: 'index.bemjson.html',
+      xhtml: true,
+    }),
+    new HtmlWebpackPlugin({
+      chunks: [isProd ? 'dist' : 'text.bemjson'],
+      filename: 'text.bemjson.html',
+      xhtml: true,
+    }),
+    new HtmlWebpackAssetTemplatePlugin(),
+    new HtmlIndexPlugin(),
+    new CopyWebpackPlugin([{
+      from: path.join(srcPath, '**', '*.{jpeg,jpg,png,gif,svg}'),
+      context: srcPath,
+    }]),
 
-    // new HtmlWebpackPlugin({
-    //   template: 'build/index.html',
-    // }),
+    // TODO: link-media-html-webpack-plugin
 
-    // new DashboardPlugin(),
-    // new webpack.HotModuleReplacementPlugin(),
-    new HtmlWebpackPlugin(),
+    // Production plugins
+    ...isProd ? [
+      new webpack.LoaderOptionsPlugin({
+        minimize: true,
+        debug: false,
+      }),
+      new webpack.optimize.UglifyJsPlugin({
+        sourceMap: true,
+        extractComments: true,
+      }),
+      // new webpack.optimize.CommonsChunkPlugin({
+      //   name: 'common',
+      //   filename: 'bundle.js',
+      //   // minChunks: 2,
+      // }),
+      new OptimizeCssnanoPlugin({
+        sourceMap: true,
+        cssnanoOptions: {
+          preset: ['default', {discardComments: {removeAll: true}}],
+        },
+      }),
+      new PreloadWebpackPlugin({
+        fileBlacklist: [/\.css$/i, /\.map$/i],
+        include: 'all',
+        rel: 'preload',
+      }),
+      new FaviconsWebpackPlugin({
+        logo: path.join(srcPath, 'favicon.png'),
+        prefix: 'favicons/',
+        title: 'BEM',
+        icons: {
+          android: true,
+          appleIcon: true,
+          appleStartup: false,
+          coast: false,
+          favicons: true,
+          firefox: false,
+          opengraph: false,
+          twitter: false,
+          yandex: false,
+          windows: false,
+        },
+      }),
+
+      // TODO: https://www.npmjs.com/browse/keyword/imageminplugin
+      new ImageminPlugin({
+        svgo: null,
+      }),
+    ] : [],
   ],
+
   devServer: {
     contentBase: path.resolve(__dirname, isProd ? 'dist' : 'build'),
-    port: 8080,
     host: 'localhost',
-    // historyApiFallback: true,
-    // noInfo: false,
-    // stats: 'minimal',
-    // publicPath: publicPath
-    // lazy: true,
-    // hot: true
-    // overlay: {
-    //   warnings: true,
-    //   errors: true
-    // },
-    // watchContentBase: true
+    overlay: true,
     watchOptions: {
       ignored: /node_modules/,
     },
   },
 };
-
-if (isProd) {
-  config.plugins = config.plugins.concat([
-    new webpack.LoaderOptionsPlugin({
-      minimize: true,
-      debug: false,
-    }),
-    // new webpack.optimize.CommonsChunkPlugin({}),
-    new webpack.optimize.UglifyJsPlugin({
-      sourceMap: true,
-      // comments: /^\**!|@preserve|@license|@cc_on/,
-      // beautify: false,
-      // semicolons: true,
-      // shebang: true,
-      // mangle: {
-      //   screw_ie8: true,
-      //   keep_fnames: true,
-      // },
-      // compress: {
-      //   screw_ie8: true,
-      // },
-    }),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'common',
-      filename: 'bundle.js',
-      // minChunks: 2,
-    }),
-    // new OptimizeCssAssetsPlugin({
-    //   cssProcessor: require('cssnano')({
-    //     preset: 'default',
-    //   }),
-    //   // cssProcessorOptions: {preset: 'default'},
-    // }),
-  ]);
-}
-
-module.exports = config;

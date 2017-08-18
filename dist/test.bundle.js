@@ -1,2 +1,0 @@
-webpackJsonp([2],{100:function(n,o){},96:function(n,o,t){t(97),t(98);t(99),t(100)},97:function(n,o){},98:function(n,o){},99:function(n,o){n.exports=function(n){alert(n)}}},[96]);
-//# sourceMappingURL=test.bundle.js.map

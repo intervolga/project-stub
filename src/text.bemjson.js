@@ -20,10 +20,6 @@ const headingText = [
 module.exports = {
   block: 'page',
   title: 'Текстовая',
-  // styles: [{elem: 'css', url: '../_merged/_merged.css'}],
-  // scripts: [{elem: 'js', url: '../_merged/_merged.async.js', async: true},
-  //     {elem: 'js', url: '../_merged/_merged.js'}, {elem: 'js', url: '../_merged/_merged.i18n.ru.js'}],
-  scripts: [{ elem: 'js', url: 'text.bemjson.bundle.js' }],
   content: [
     {
       tag: 'h1',
@@ -281,6 +277,18 @@ module.exports = {
           ],
         },
       ],
+    },
+    {
+      block: 'image',
+      url: 'images/jpg.jpg',
+    },
+    {
+      block: 'image',
+      url: 'images/png.png',
+    },
+    {
+      block: 'image',
+      url: 'images/gif.gif',
     },
   ],
 };
