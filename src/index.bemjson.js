@@ -10,7 +10,7 @@ module.exports = {
   ],
   mods: {theme: 'islands'},
   content: [
-    {block: 'p', content: 'p-block13'},
+    {block: 'p', content: 'p-block1'},
     {
       block: 'header',
       content: [

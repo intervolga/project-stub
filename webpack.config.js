@@ -157,7 +157,6 @@ module.exports = {
             options: {
               levels: pkg.bemLevels,
               techMap: pkg.bemTechs,
-              bhFilename: path.resolve(path.join('lib', 'bh.js')),
             },
           },
           {
