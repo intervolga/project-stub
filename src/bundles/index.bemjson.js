@@ -10,16 +10,14 @@ module.exports = {
   ],
   mods: {theme: 'islands'},
   content: [
-    {block: 'p', content: 'p-block1'},
-    {
-      block: 'header',
-      content: [
-        'header content goes here',
-      ],
-    },
+    require('./common/header.bemjson'),
     {
       block: 'content',
       content: [
+        {
+          block: 'image',
+          url: 'images/webpack.png',
+        },
         {
           tag: 'p',
           content: [
@@ -514,11 +512,6 @@ module.exports = {
         },
       ],
     },
-    {
-      block: 'footer',
-      content: [
-        'footer content goes here',
-      ],
-    },
+    require('./common/footer.bemjson'),
   ],
 };

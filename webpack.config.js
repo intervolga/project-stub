@@ -10,143 +10,208 @@ const HtmlWebpackAssetTemplatePlugin =
   require('@intervolga/html-webpack-asset-template-plugin');
 const HtmlIndexPlugin = require('@intervolga/html-index-plugin');
 const ImageminPlugin = require('imagemin-webpack-plugin').default;
-const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
-const PreloadWebpackPlugin = require('preload-webpack-plugin');
+const imageminMozjpeg = require('imagemin-mozjpeg');
 const pkg = require('./package.json');
 
 const isProd = 'production' === process.env.NODE_ENV;
-
-// Read source directory and gerate entry points object
-const srcPath = path.resolve(__dirname, 'src');
-const entries = fs.readdirSync(srcPath)
+const srcPath = path.resolve(__dirname, 'src', 'bundles');
+const bemJsonEntries = fs.readdirSync(srcPath)
   .filter((file) => {
-    return /\.js$/i.test(file);
+    return /\.bemjson\.js$/i.test(file);
   }).map((file) => {
     return path.join(srcPath, file);
-  }).reduce(function(res, curr) {
-    if (isProd) {
-      res['dist'] = res['dist'] || [];
-      res['dist'].push(curr);
-    } else {
-      const key = path.basename(curr, '.js');
-      res[key] = curr;
-    }
+  });
+const moduleEntries = bemJsonEntries.reduce(function(res, curr) {
+  if (isProd) {
+    res['merged'] = res['merged'] || [];
+    res['merged'].push(curr);
+  } else {
+    const key = path.basename(curr, '.js');
+    res[key] = curr;
+  }
 
-    return res;
-  }, {});
+  return res;
+}, {});
 
 module.exports = {
-  entry: entries,
+  entry: moduleEntries,
 
   output: {
     path: path.resolve(__dirname, isProd ? 'dist' : 'build'),
-    filename: '[name].bundle.js',
+    filename: 'assets/[name].js',
   },
 
   devtool: isProd ? 'source-map' : 'cheap-source-map',
 
   module: {
     rules: [
-      {
-        test: /\.(ttf|eot|woff)(\?v=[\d+\.]+)?$/,
-        include: /\/node_modules\//,
-        loader: 'file-loader',
-        options: {name: 'assets/[1]', regExp: /node_modules\/(.*)/},
-      },
-      {
-        test: /\.woff2(\?v=[\d+\.]+)?$/,
-        include: /\/node_modules\//,
-        loader: 'url-loader',
-        options: {
-          name: 'assets/[1]',
-          regExp: /node_modules\/(.*)/,
-          limit: 4096,
+      // Fonts except WOFF2
+      ...[
+        {
+          test: /\.(ttf|eot|woff)(\?v=[\d+\.]+)?$/,
+          include: /\/node_modules\//,
+          loader: 'file-loader',
+          options: {name: 'assets/[1]', regExp: /node_modules\/(.*)/},
         },
-      },
-      {
-        test: /\.svg(\?v=[\d+\.]+)?$/,
-        include: /\/node_modules\//,
-        loader: 'svg-url-loader',
-        options: {
-          name: 'assets/[1]',
-          regExp: /node_modules\/(.*)/,
-          limit: 4096,
+        {
+          test: /\.(ttf|eot|woff)(\?v=[\d+\.]+)?$/,
+          exclude: /\/node_modules\//,
+          loader: 'file-loader',
+          options: {name: 'assets/[path][name].[ext]'},
         },
-      },
-      {
-        test: /\.(jpe?g|png|gif)$/,
-        include: /\/node_modules\//,
-        loader: 'url-loader',
-        options: {
-          name: 'assets/[1].[ext]',
-          regExp: /node_modules\/(.*)/,
-          limit: 4096,
+      ],
+
+      // WOFF2 as most compact font format may be inlined
+      ...[
+        {
+          test: /\.woff2(\?v=[\d+\.]+)?$/,
+          include: /\/node_modules\//,
+          loader: 'url-loader',
+          options: {
+            name: 'assets/[1]',
+            regExp: /node_modules\/(.*)/,
+            limit: 3072,
+          },
         },
-      },
-      {
-        test: /\.(ttf|eot|woff)(\?v=[\d+\.]+)?$/,
-        exclude: /\/node_modules\//,
-        loader: 'file-loader',
-        options: {name: 'assets/[path][name].[ext]'},
-      },
-      {
-        test: /\.woff2(\?v=[\d+\.]+)?$/,
-        exclude: /\/node_modules\//,
-        loader: 'url-loader',
-        options: {name: 'assets/[path][name].[ext]', limit: 4096},
-      },
-      {
-        test: /\.svg(\?v=[\d+\.]+)?$/,
-        exclude: /\/node_modules\//,
-        loader: 'svg-url-loader',
-        options: {name: 'assets/[path][name].[ext]', limit: 4096},
-      },
-      {
-        test: /\.(jpe?g|png|gif)$/,
-        exclude: /\/node_modules\//,
-        loader: 'url-loader',
-        options: {name: 'assets/[path][name].[ext]', limit: 4096},
-      },
-      {
-        test: /\.css$/,
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
+        {
+          test: /\.woff2(\?v=[\d+\.]+)?$/,
+          exclude: /\/node_modules\//,
+          loader: 'url-loader',
+          options: {name: 'assets/[path][name].[ext]', limit: 3072},
+        },
+      ],
+
+      // Images except SVG
+      ...[
+        {
+          test: /\.(jpe?g|png|gif)$/,
+          include: /\/node_modules\//,
           use: [
             {
-              loader: 'css-loader',
-              options: {importLoaders: 1, minimize: isProd, sourceMap: isProd},
-            },
-            {
-              loader: 'postcss-loader',
-              options: {sourceMap: false},
-            },
-          ],
-        }),
-      },
-      {
-        test: /\.scss$/,
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: [
-            {
-              loader: 'css-loader',
-              options: {minimize: isProd, sourceMap: isProd},
-            },
-            {
-              loader: 'postcss-loader',
-              options: {sourceMap: isProd},
-            },
-            {
-              loader: 'sass-loader',
+              loader: 'url-loader',
               options: {
-                outputStyle: 'expanded',
-                // includePaths: ['absolute/path/a', 'absolute/path/b']
-                sourceMap: isProd,
+                name: 'assets/[1].[ext]',
+                regExp: /node_modules\/(.*)/,
+                limit: 3072,
+              },
+            },
+            {
+              loader: 'imagemin-loader',
+              options: {
+                enabled: isProd,
+                plugins: [
+                  {use: 'imagemin-optipng'},
+                  {use: 'imagemin-gifsicle'},
+                  {use: 'imagemin-jpegtran'},
+                  {use: 'imagemin-svgo'},
+                  {
+                    use: imageminMozjpeg,
+                    options: {
+                      quality: 85, // Default from Google PageSpeed
+                      progressive: true,
+                    },
+                  },
+                ],
               },
             },
           ],
-        }),
-      },
+        },
+        {
+          test: /\.(jpe?g|png|gif)$/,
+          exclude: /\/node_modules\//,
+          use: [
+            {
+              loader: 'url-loader',
+              options: {name: 'assets/[path][name].[ext]', limit: 3072},
+            },
+            {
+              loader: 'imagemin-loader',
+              options: {
+                enabled: isProd,
+                plugins: [
+                  {use: 'imagemin-optipng'},
+                  {use: 'imagemin-gifsicle'},
+                  {use: 'imagemin-jpegtran'},
+                  {use: 'imagemin-svgo'},
+                  {
+                    use: imageminMozjpeg,
+                    options: {
+                      quality: 85, // Default from Google PageSpeed
+                      progressive: true,
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      ],
+
+      // SVG images may may be inlined in a clever way
+      ...[
+        {
+          test: /\.svg(\?v=[\d+\.]+)?$/,
+          include: /\/node_modules\//,
+          loader: 'svg-url-loader',
+          options: {
+            name: 'assets/[1]',
+            regExp: /node_modules\/(.*)/,
+            limit: 3072,
+          },
+        },
+        {
+          test: /\.svg(\?v=[\d+\.]+)?$/,
+          exclude: /\/node_modules\//,
+          loader: 'svg-url-loader',
+          options: {name: 'assets/[path][name].[ext]', limit: 3072},
+        },
+      ],
+
+      // Styles
+      ...[
+        {
+          test: /\.css$/,
+          use: ExtractTextPlugin.extract({
+            fallback: 'style-loader',
+            use: [
+              {
+                loader: 'css-loader',
+                options: {
+                  importLoaders: 1,
+                  minimize: isProd,
+                  sourceMap: isProd,
+                },
+              },
+              {
+                loader: 'postcss-loader',
+                options: {sourceMap: isProd ? 'inline' : false},
+              },
+            ],
+          }),
+        },
+        {
+          test: /\.scss$/,
+          use: ExtractTextPlugin.extract({
+            fallback: 'style-loader',
+            use: [
+              {
+                loader: 'css-loader',
+                options: {minimize: isProd, sourceMap: isProd},
+              },
+              {
+                loader: 'postcss-loader',
+                options: {sourceMap: isProd ? 'inline' : false},
+              },
+              {
+                loader: 'sass-loader',
+                options: {outputStyle: 'expanded', sourceMap: isProd},
+              },
+            ],
+          }),
+        },
+      ],
+
+      // BEM
       {
         test: /\.bemjson\.js$/,
         use: [
@@ -167,11 +232,11 @@ module.exports = {
           '@intervolga/eval-loader',
         ],
       },
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        loader: 'eslint-loader',
-      },
+      // {
+      //   test: /\.js$/,
+      //   exclude: /node_modules/,
+      //   loader: 'eslint-loader',
+      // },
     ],
 
     noParse: [
@@ -188,81 +253,58 @@ module.exports = {
       'LANG': JSON.stringify('ru'),
     }),
     new webpack.ProvidePlugin({
-      '$': 'jquery/dist/jquery.min.js',
-      'jQuery': 'jquery/dist/jquery.min.js',
+      // '$': 'jquery/dist/jquery.min.js',
+      // 'jQuery': 'jquery/dist/jquery.min.js',
       'modules': 'ym',
     }),
     new ExtractTextPlugin({
       allChunks: true,
-      filename: '[name].bundle.css',
+      filename: 'assets/[name].css',
       disable: !isProd,
     }),
-    new HtmlWebpackPlugin({
-      chunks: [isProd ? 'dist' : 'index.bemjson'],
-      filename: 'index.bemjson.html',
-      xhtml: true,
-    }),
-    new HtmlWebpackPlugin({
-      chunks: [isProd ? 'dist' : 'text.bemjson'],
-      filename: 'text.bemjson.html',
-      xhtml: true,
+    ...bemJsonEntries.map((bemJsonName) => {
+      const base = path.basename(bemJsonName, '.js');
+      return new HtmlWebpackPlugin({
+        chunks: [isProd ? 'merged' : base],
+        filename: base + '.html',
+        xhtml: true,
+      });
     }),
     new HtmlWebpackAssetTemplatePlugin(),
     new HtmlIndexPlugin(),
     new CopyWebpackPlugin([{
-      from: path.join(srcPath, '**', '*.{jpeg,jpg,png,gif,svg}'),
+      from: path.join(srcPath, '**', '*.{jpeg,jpg,png,gif,svg,ico}'),
       context: srcPath,
     }]),
 
-    // TODO: link-media-html-webpack-plugin
-
-    // Production plugins
+    // Production-only plugins
     ...isProd ? [
       new webpack.LoaderOptionsPlugin({
         minimize: true,
         debug: false,
       }),
+      // TODO: will it work with BEM?
+      // new webpack.optimize.CommonsChunkPlugin({
+      //   name: 'merged',
+      //   children: true,
+      //   async: true,
+      //   minChunks: 2,
+      // }),
       new webpack.optimize.UglifyJsPlugin({
         sourceMap: true,
         extractComments: true,
       }),
-      // new webpack.optimize.CommonsChunkPlugin({
-      //   name: 'common',
-      //   filename: 'bundle.js',
-      //   // minChunks: 2,
-      // }),
       new OptimizeCssnanoPlugin({
         sourceMap: true,
         cssnanoOptions: {
           preset: ['default', {discardComments: {removeAll: true}}],
         },
       }),
-      new PreloadWebpackPlugin({
-        fileBlacklist: [/\.css$/i, /\.map$/i],
-        include: 'all',
-        rel: 'preload',
-      }),
-      new FaviconsWebpackPlugin({
-        logo: path.join(srcPath, 'favicon.png'),
-        prefix: 'favicons/',
-        title: 'BEM',
-        icons: {
-          android: true,
-          appleIcon: true,
-          appleStartup: false,
-          coast: false,
-          favicons: true,
-          firefox: false,
-          opengraph: false,
-          twitter: false,
-          yandex: false,
-          windows: false,
-        },
-      }),
-
-      // TODO: https://www.npmjs.com/browse/keyword/imageminplugin
       new ImageminPlugin({
-        svgo: null,
+        plugins: [imageminMozjpeg({
+          quality: 85, // Default from Google PageSpeed
+          progressive: true, // TODO: progressive if 10+ Kb
+        })],
       }),
     ] : [],
   ],

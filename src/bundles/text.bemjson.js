@@ -19,8 +19,9 @@ const headingText = [
 
 module.exports = {
   block: 'page',
-  title: 'Текстовая',
+  title: 'Текстовая1',
   content: [
+    require('./common/header.bemjson'),
     {
       tag: 'h1',
       content: 'Заголовок h1 — основной заголовок страницы. ' + headingText,
@@ -278,17 +279,6 @@ module.exports = {
         },
       ],
     },
-    {
-      block: 'image',
-      url: 'images/jpg.jpg',
-    },
-    {
-      block: 'image',
-      url: 'images/png.png',
-    },
-    {
-      block: 'image',
-      url: 'images/gif.gif',
-    },
+    require('./common/footer.bemjson'),
   ],
 };
