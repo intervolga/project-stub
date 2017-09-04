@@ -300,10 +300,29 @@ module.exports = {
           preset: ['default', {discardComments: {removeAll: true}}],
         },
       }),
+      new ImageminPlugin({jpegtran: null}),
       new ImageminPlugin({
+        optipng: null,
+        gifsicle: null,
+        jpegtran: {progressive: false},
+        svgo: null,
+        pngquant: null,
+        maxFileSize: 10240,
         plugins: [imageminMozjpeg({
-          quality: 85, // Default from Google PageSpeed
-          progressive: true, // TODO: progressive if 10+ Kb
+          quality: 85,
+          progressive: false,
+        })],
+      }),
+      new ImageminPlugin({
+        optipng: null,
+        gifsicle: null,
+        jpegtran: {progressive: true},
+        svgo: null,
+        pngquant: null,
+        minFileSize: 10240,
+        plugins: [imageminMozjpeg({
+          quality: 85,
+          progressive: true,
         })],
       }),
     ] : [],
