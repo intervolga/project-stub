@@ -1,0 +1,12 @@
+.page__browsehappy {
+    background-color: #f8d7da;
+    border: 1px #f5c6cb solid;
+    color: #721c24;
+    margin: 0;
+    padding: 0.5em;
+    text-align: center;
+}
+
+.ua-modern .page__browsehappy {
+    display: none;
+}

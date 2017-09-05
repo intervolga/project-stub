@@ -24,14 +24,8 @@
     "Edge >= 13"
   ],
   "bemLevels": [
-    "node_modules/bem-core/common.blocks",
-    "node_modules/bem-core/desktop.blocks",
-    "node_modules/bem-components/common.blocks",
-    "node_modules/bem-components/desktop.blocks",
-    "node_modules/bem-components/design/common.blocks",
-    "node_modules/bem-components/design/desktop.blocks",
-    "src/common.blocks",
-    "src/desktop.blocks"
+    "src/blocks.01-base",
+    "src/blocks.02-bootstrap"
   ],
   "bemTechs": {
     "styles": [
@@ -48,15 +42,13 @@
     ]
   },
   "dependencies": {
-    "bem-font-awesome": "^1.0.1",
-    "bem-font-awesome-icons": "^1.1.1",
     "bootstrap": "^4.0.0-beta",
     "font-awesome": "^4.7.0",
     "jquery": "^3.2.1",
     "popper.js": "^1.12.5"
   },
   "devDependencies": {
-    "@intervolga/bembh-loader": "^1.1.3",
+    "@intervolga/bembh-loader": "^1.1.4",
     "@intervolga/bemdecl-loader": "^1.0.3",
     "@intervolga/bemdeps-loader": "^1.1.4",
     "@intervolga/bemjson-loader": "^1.2.2",
@@ -66,8 +58,6 @@
     "@intervolga/html-webpack-asset-template-plugin": "^1.0.1",
     "@intervolga/optimize-cssnano-plugin": "^1.0.3",
     "autoprefixer": "^6.7.7",
-    "bem-components": "^6.0.1",
-    "bem-core": "^4.2.0",
     "clean-webpack-plugin": "^0.1.16",
     "copy-webpack-plugin": "^4.0.1",
     "cross-env": "^5.0.1",
@@ -93,8 +83,7 @@
     "url-loader": "^0.5.9",
     "webpack": "^3.5.5",
     "webpack-bundle-analyzer": "^2.9.0",
-    "webpack-dev-server": "^2.6.1",
-    "ym": "^0.1.2"
+    "webpack-dev-server": "^2.6.1"
   },
   "scripts": {
     "lint:fix": "eslint --fix src",

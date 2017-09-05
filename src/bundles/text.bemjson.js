@@ -22,6 +22,7 @@ module.exports = {
   title: 'Текстовая1',
   content: [
     require('./common/header.bemjson'),
+    {block:'p', content:'test'},
     {
       tag: 'h1',
       content: 'Заголовок h1 — основной заголовок страницы. ' + headingText,

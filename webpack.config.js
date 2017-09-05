@@ -255,7 +255,7 @@ module.exports = {
     new webpack.ProvidePlugin({
       // '$': 'jquery/dist/jquery.min.js',
       // 'jQuery': 'jquery/dist/jquery.min.js',
-      'modules': 'ym',
+      // 'modules': 'ym',
     }),
     new ExtractTextPlugin({
       allChunks: true,
