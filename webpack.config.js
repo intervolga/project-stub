@@ -107,7 +107,7 @@ module.exports = {
                   {
                     use: imageminMozjpeg,
                     options: {
-                      quality: 85, // Default from Google PageSpeed
+                      quality: 85,
                       progressive: true,
                     },
                   },
@@ -136,7 +136,7 @@ module.exports = {
                   {
                     use: imageminMozjpeg,
                     options: {
-                      quality: 85, // Default from Google PageSpeed
+                      quality: 85,
                       progressive: true,
                     },
                   },
@@ -204,7 +204,13 @@ module.exports = {
               },
               {
                 loader: 'sass-loader',
-                options: {outputStyle: 'expanded', sourceMap: isProd},
+                options: {
+                  outputStyle: 'expanded',
+                  data: '@import "' + path.join(__dirname, 'src', 'sass-globals',
+                    'sass-globals') + '";',
+                  // includePaths: [srcPath],
+                  sourceMap: isProd,
+                },
               },
             ],
           }),
@@ -216,7 +222,12 @@ module.exports = {
         test: /\.bemjson\.js$/,
         use: [
           '@intervolga/bemrequire-loader',
-          '@intervolga/bembh-loader',
+          {
+            loader: '@intervolga/bembh-loader',
+            options: {
+              bhFilename: require.resolve('@intervolga/bh-ext'),
+            },
+          },
           {
             loader: '@intervolga/bemdeps-loader',
             options: {
@@ -238,10 +249,6 @@ module.exports = {
       //   loader: 'eslint-loader',
       // },
     ],
-
-    noParse: [
-      /\/node_modules\/jquery\/dist\/jquery\.min\.js/,
-    ],
   },
 
   plugins: [
@@ -253,9 +260,8 @@ module.exports = {
       'LANG': JSON.stringify('ru'),
     }),
     new webpack.ProvidePlugin({
-      // '$': 'jquery/dist/jquery.min.js',
-      // 'jQuery': 'jquery/dist/jquery.min.js',
-      // 'modules': 'ym',
+      '$': 'jquery',
+      'jQuery': 'jquery',
     }),
     new ExtractTextPlugin({
       allChunks: true,

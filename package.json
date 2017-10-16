@@ -25,7 +25,8 @@
   ],
   "bemLevels": [
     "src/blocks.01-base",
-    "src/blocks.02-bootstrap"
+    "src/blocks.02-bootstrap",
+    "src/blocks.03-project"
   ],
   "bemTechs": {
     "styles": [
@@ -33,9 +34,7 @@
       "scss"
     ],
     "scripts": [
-      "vanilla.js",
-      "js",
-      "browser.js"
+      "js"
     ],
     "html": [
       "bh.js"
@@ -45,14 +44,16 @@
     "bootstrap": "^4.0.0-beta",
     "font-awesome": "^4.7.0",
     "jquery": "^3.2.1",
-    "popper.js": "^1.12.5"
+    "popper.js": "^1.12.5",
+    "slick-carousel": "^1.7.1"
   },
   "devDependencies": {
-    "@intervolga/bembh-loader": "^1.1.4",
+    "@intervolga/bembh-loader": "^1.1.5",
     "@intervolga/bemdecl-loader": "^1.0.3",
     "@intervolga/bemdeps-loader": "^1.1.4",
     "@intervolga/bemjson-loader": "^1.2.2",
     "@intervolga/bemrequire-loader": "^1.1.2",
+    "@intervolga/bh-ext": "^1.0.2",
     "@intervolga/eval-loader": "^1.0.1",
     "@intervolga/html-index-plugin": "^1.0.1",
     "@intervolga/html-webpack-asset-template-plugin": "^1.0.1",

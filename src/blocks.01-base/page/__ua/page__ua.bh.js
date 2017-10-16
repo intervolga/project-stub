@@ -5,14 +5,14 @@ module.exports = function(bh) {
       .attr('data-skip-moving', 'true')
       .content([
         '/* beautify preserve:start */',
-        '!function(e,n){function r(){var e={elem:n.createElement("modernizr"' +
-        ')}.elem.style;try{return e.fontSize="3ch",-1!==e.fontSize.indexOf("' +
-        'ch")}catch(e){return!1}}function t(){return"performance"in e}functi' +
-        'on a(){var n,r=e.crypto;if(r&&"getRandomValues"in r&&"Uint32Array"i' +
-        'n e){var t=new Uint32Array(10),a=r.getRandomValues(t);n=a&&"number"' +
-        '==typeof a[0]}return!!n}var o=n.documentElement.className;o=o.repla' +
-        'ce("ua-no-js","ua-js"),t()&&a()&&r()?o+=" ua-modern":o+=" ua-no-mod' +
-        'ern",n.documentElement.className=o}(window,document);',
+        '!function(e,n){function r(){var e={elem:n.createElement("modernizr")' +
+        '}.elem.style;try{return e.fontSize="3ch",-1!==e.fontSize.indexOf("ch' +
+        '")}catch(e){return!1}}function t(){return"performance"in e}function ' +
+        'a(){var n,r=e.crypto||e.msCrypto;if(r&&"getRandomValues"in r&&"Uint3' +
+        '2Array"in e){var t=new Uint32Array(10),a=r.getRandomValues(t);n=a&&"' +
+        'number"==typeof a[0]}return!!n}var o=n.documentElement.className;o=o' +
+        '.replace("ua-no-js","ua-js"),t()&&a()&&r()?o+=" ua-modern":o+=" ua-n' +
+        'o-modern",n.documentElement.className=o}(window,document);',
         '/* beautify preserve:end */',
       ], true);
   });
@@ -61,7 +61,7 @@ module.exports = function(bh) {
 //     // In Safari <=5.0 `window.crypto` exists (for some reason) but is
 //     // `undefined`, so we have to check it’s truthy before checking for
 //     // existence of `getRandomValues`
-//     var crypto = window['crypto'];
+//     var crypto = window['crypto'] || window['msCrypto'];
 //     var supportsGetRandomValues;
 //
 //     // Safari 6.0 supports crypto.getRandomValues, but does not return the

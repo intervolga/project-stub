@@ -4,10 +4,11 @@ module.exports = function(bh) {
         || 'В вашем браузере отключен JavaScript. ' +
         'Многие элементы сайта могут работать некорректно.',
       oldBrowserWarning = json.oldBrowserWarning ||
-        'Вы используете <strong>устаревший</strong> браузер. Пожалуйста ' +
-        '<a rel="nofollow" onclick="window.open(this.href, \'_blank\');' +
-        'return false;" href="http://browsehappy.com/">обновите свой ' +
-        'браузер</a> чтобы улучшить взаимодействие с сайтом.';
+        'Ваш браузер устарел и не обеспечивает полноценную и безопасную ' +
+        'работу с сайтом. Пожалуйста <a rel="nofollow" ' +
+        'onclick="window.open(this.href, \'_blank\');return false;" ' +
+        'href="https://browsehappy.com/">обновите браузер</a>, чтобы ' +
+        'улучшить взаимодействие с сайтом.';
 
     ctx
       .tag('body')

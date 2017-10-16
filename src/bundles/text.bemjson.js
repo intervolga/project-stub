@@ -19,10 +19,11 @@ const headingText = [
 
 module.exports = {
   block: 'page',
-  title: 'Текстовая1',
+  title: 'Текстовая',
   content: [
     require('./common/header.bemjson'),
-    {block:'p', content:'test'},
+    {block: 'container', content: 'container'},
+    {block: 'container', mods: {fluid: true}, content: 'container fluid'},
     {
       tag: 'h1',
       content: 'Заголовок h1 — основной заголовок страницы. ' + headingText,
