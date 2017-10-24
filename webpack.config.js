@@ -206,8 +206,9 @@ module.exports = {
                 loader: 'sass-loader',
                 options: {
                   outputStyle: 'expanded',
-                  data: '@import "' + path.join(__dirname, 'src', 'sass-globals',
-                    'sass-globals') + '";',
+                  data: '@import ' + JSON.stringify(
+                    path.join(__dirname, 'src', 'sass-globals',
+                      'sass-globals.scss')) + ';',
                   // includePaths: [srcPath],
                   sourceMap: isProd,
                 },
