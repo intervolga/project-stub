@@ -12,6 +12,7 @@ module.exports = function(bh) {
 
     ctx
       .tag('body')
+      .bem(false)
       .content([
         '<!--noindex-->',
         {elem: 'noscript', content: noscriptWarning},
