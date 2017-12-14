@@ -281,8 +281,6 @@ module.exports = {
         },
       ],
     },
-    {block: 'test-modal'},
-    require('./common/auth-form.bemjson'),
     require('./common/footer.bemjson'),
   ],
 };

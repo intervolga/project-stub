@@ -13,6 +13,8 @@ const ImageminPlugin = require('imagemin-webpack-plugin').default;
 const imageminMozjpeg = require('imagemin-mozjpeg');
 const pkg = require('./package.json');
 
+require('@babel/polyfill');
+
 const isProd = 'production' === process.env.NODE_ENV;
 const srcPath = path.resolve(__dirname, 'src', 'bundles');
 const bemJsonEntries = fs.readdirSync(srcPath)
@@ -23,10 +25,12 @@ const bemJsonEntries = fs.readdirSync(srcPath)
   });
 const moduleEntries = bemJsonEntries.reduce(function(res, curr) {
   if (isProd) {
+    // res['merged'] = res['merged'] || ['@babel/polyfill'];
     res['merged'] = res['merged'] || [];
     res['merged'].push(curr);
   } else {
     const key = path.basename(curr, '.js');
+    // res[key] = ['@babel/polyfill', curr];
     res[key] = curr;
   }
 
@@ -250,11 +254,30 @@ module.exports = {
           '@intervolga/eval-loader',
         ],
       },
-      // {
-      //   test: /\.js$/,
-      //   exclude: /node_modules/,
-      //   loader: 'eslint-loader',
-      // },
+      // TODO: babel polyfills in prod for node_modules
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            cacheDirectory: !isProd,
+            babelrc: false,
+            presets: [
+              ['@babel/preset-env', {
+                targets: {
+                  browsers: pkg.browserslist,
+                  forceAllTransforms: isProd,
+                },
+                  modules: false,
+                  useBuiltIns: 'usage',
+                  // debug: !isProd,
+              }],
+            ],
+            plugins: ['@babel/transform-runtime'],
+          },
+        },
+      },
     ],
   },
 
