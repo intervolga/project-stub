@@ -335,9 +335,13 @@ module.exports = {
         minimize: true,
         debug: false,
       }),
+      // Vendor chunks
+      // Manifest, minChunks: Infinity
+      // HashedModuleIdsPlugin
       // TODO: will it work with BEM?
       // new webpack.optimize.CommonsChunkPlugin({
       //   name: 'merged',
+      //   filename: '[name]-chunk.js',
       //   children: true,
       //   async: true,
       //   minChunks: 2,
