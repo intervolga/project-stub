@@ -11,7 +11,7 @@ module.exports = function (bh) {
                 ctx.content(
                     ctx.content().map((item)=>{
                         if(typeof item !== 'string') return item;
-                        return {tag: 'option', attrs: {value: ctx.generateId()}, content: item}
+                        return {tag: 'option', content: item}
                     }),
                     true
                 ); break;

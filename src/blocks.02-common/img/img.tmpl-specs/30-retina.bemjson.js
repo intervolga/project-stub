@@ -1,15 +1,4 @@
-// Examples;
 module.exports = [
-    // Default tag
-    {block: 'img', src: 'http://placehold.it/100x100', content: 'my image'},
-    
-    // Lazy load
-    {block: 'img', mods: {lazy: true},
-        src: 'http://placehold.it/100x100?text=lazy',
-        content: 'my image'
-    },
-    
-    // Retina
     {block: 'img', mods: {lazy: true},
         src: 'http://placehold.it/100x100?text=lazy',
         srcset: [
@@ -18,4 +7,4 @@ module.exports = [
         ],
         content: 'my image'
     }
-];
+]
