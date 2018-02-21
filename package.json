@@ -26,8 +26,9 @@
   "bemLevels": [
     "src/blocks.01-base",
     "src/blocks.02-tags",
-    "src/blocks.03-bootstrap",
-    "src/blocks.04-project"
+    "src/blocks.03-common",
+    "src/blocks.04-bootstrap",
+    "src/blocks.05-project"
   ],
   "bemTechs": {
     "styles": [

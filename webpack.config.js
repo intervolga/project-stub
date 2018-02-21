@@ -293,7 +293,6 @@ module.exports = {
       '$': 'jquery',
       'jQuery': 'jquery',
       'window.jQuery': 'jquery',
-      'lazySizes': 'lazysizes',
       'tether': 'tether',
       'Tether': 'tether',
       'window.Tether': 'tether',
