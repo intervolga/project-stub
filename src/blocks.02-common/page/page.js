@@ -1,1 +1,0 @@
-window.lazySizesConfig = window.lazySizesConfig || {};
