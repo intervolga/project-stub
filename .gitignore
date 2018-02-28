@@ -6,3 +6,6 @@ node_modules/
 .project
 .svn
 npm-debug.log
+.enb
+!.enb/make.js
+!.enb/techs/
