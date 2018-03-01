@@ -188,7 +188,7 @@ module.exports = {
               },
               {
                 loader: 'postcss-loader',
-                options: {sourceMap: isProd ? 'inline' : false},
+                options: {sourceMap: isProd},
               },
             ],
           }),
