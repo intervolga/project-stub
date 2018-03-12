@@ -16,18 +16,7 @@ module.exports = {
           require('../blocks.02-common/img/img.tmpl-specs/30-retina.bemjson.js')
         ]}
       ]},
-      {mix: {block: 'mb-5'}, content: [
-        {block: 'h', size: '2', content: 'Блок "form-control"'},
-        {mix: {block: 'mb-2'}, content: [
-          require('../blocks.03-bootstrap/form-control/form-control.tmpl-specs/10-default.bemjson.js')
-        ]},
-        {mix: {block: 'mb-2'}, content: [
-          require('../blocks.03-bootstrap/form-control/form-control.tmpl-specs/20-select.bemjson.js')
-        ]},
-        {mix: {block: 'mb-2'}, content: [
-          require('../blocks.03-bootstrap/form-control/form-control.tmpl-specs/30-textarea.bemjson.js')
-        ]}
-      ]}
+      
     ]},
     require('./common/footer.bemjson.js')
   ]
