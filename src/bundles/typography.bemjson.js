@@ -1,6 +1,6 @@
 module.exports = {
   block: 'page',
-  title: 'Пустая странциа',
+  title: 'Шаблон типографии',
   content: [
     require('./common/header.bemjson.js'),
     {mix: {block: 'container'}, content: [
