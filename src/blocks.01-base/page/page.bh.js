@@ -32,19 +32,13 @@ module.exports = function(bh) {
           {
             elem: 'head',
             content: [
-              {tag: 'meta', attrs: {charset: 'utf-8'}},
-              {
-                tag: 'meta',
-                attrs: {
-                  name: 'viewport',
-                  content: 'width=device-width, initial-scale=1, ' +
-                  'shrink-to-fit=no',
-                },
-              },
-              {tag: 'title', content: json.title},
-              {elem: 'ua'},
-              json.head,
-              json.styles,
+                {tag: 'meta', attrs: {charset: 'utf-8'}},
+                {tag: 'meta', attrs: { name: 'viewport', content: 'width=device-width, initial-scale=1, shrink-to-fit=no' }},
+                {tag: 'title', content: json.title},
+                {tag: 'link', attrs: {rel: 'shortcut icon', href: 'favicons/favicon.ico', type: 'image/x-icon'}},
+                {elem: 'ua'},
+                json.head,
+                json.styles,
             ],
           },
           json,

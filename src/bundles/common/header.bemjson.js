@@ -1,6 +1,7 @@
-module.exports = {
-  block: 'header',
-  content: [
-    'header content goes here',
-  ],
-};
+module.exports = [
+  {block: 'header', content: [
+    {mix: {block: 'container'}, content: [
+      'header content goes here',
+    ]}
+  ]}
+];

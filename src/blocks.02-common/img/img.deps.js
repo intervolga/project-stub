@@ -1,5 +1,6 @@
 ({
     mustDeps: [
-        {block: '1px'}
+        {block: '1px'},
+        {block: 'lazysizes'}
     ]
 })
