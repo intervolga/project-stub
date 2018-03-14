@@ -10,7 +10,7 @@ module.exports = function (bh) {
             case 'select':
                 ctx.content(
                     ctx.content().map((item)=>{
-                        if(typeof item !== 'string') return item;
+                        if(typeof item === 'object') return item;
                         return {tag: 'option', content: item}
                     }),
                     true
