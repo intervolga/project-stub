@@ -269,7 +269,7 @@ module.exports = {
                   browsers: pkg.browserslist,
                   forceAllTransforms: isProd,
                 },
-                  modules: false,
+                  // modules: false,
                   useBuiltIns: 'usage',
                   // debug: !isProd,
               }],
