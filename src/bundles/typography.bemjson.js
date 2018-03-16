@@ -78,16 +78,24 @@ module.exports = {
       ]},
 
       {block: 'card', cls: 'mb-4', content: [
-        {elem: 'header', content: 'Изображения'},
+        {elem: 'header', content: 'Изображения в тексте'},
         {elem: 'body', content: [
-
+          {block: 'img', attrs: {align: 'left'}, src: 'http://placehold.it/400x200', content: 'my image'},
+          {tag: 'p', content: 'Эти слова совершенно справедливы, однако эзотерическое многопланово начинает эпитет. Целостность готично диссонирует психологический параллелизм. Художественное опосредование, в том числе, имитирует художественный ритуал. Притча монотонно трансформирует катарсис. Художественное восприятие монотонно заканчивает драматизм. Творческая доминанта заканчивает миракль, подобный исследовательский подход к проблемам художественной типологии можно обнаружить у К.Фосслера.'},
+          {tag: 'p', content: 'Развивая эту тему, нивелирование индивидуальности мгновенно. Комплекс априорной бисексуальности имеет бессознательный реконструктивный подход. Адаптация трансформирует сокращенный постмодернизм.'},
+          {block: 'img', attrs: {align: 'right'}, src: 'http://placehold.it/400x200', content: 'my image'},
+          {tag: 'p', content: 'Интенция возможна. Коллективное бессознательное, согласно традиционным представлениям, изящно имеет анимус. Очевидно, что возвышенное образует элитарный декаданс. Катарсис многопланово диссонирует первоначальный реализм, подобный исследовательский подход к проблемам художественной типологии можно обнаружить у К.Фосслера.'},
+          {tag: 'p', content: 'Эти слова совершенно справедливы, однако эзотерическое многопланово начинает эпитет. Целостность готично диссонирует психологический параллелизм. Художественное опосредование, в том числе, имитирует художественный ритуал. Притча монотонно трансформирует катарсис. Художественное восприятие монотонно заканчивает драматизм. Творческая доминанта заканчивает миракль, подобный исследовательский подход к проблемам художественной типологии можно обнаружить у К.Фосслера.'},
         ]}
       ]},
 
       {block: 'card', cls: 'mb-4', content: [
         {elem: 'header', content: 'Изображения с подписью (Figures)'},
         {elem: 'body', content: [
-
+          {block: 'figure', content: [
+            {block: 'img', src: 'http://placehold.it/400x200', content: 'my image'},
+            {elem: 'caption', content: 'Подпись к изображению'}
+          ]}
         ]}
       ]},
 
@@ -107,8 +115,14 @@ module.exports = {
             {mix: {block: 'form-group'}, content: [
               require('../blocks.03-bootstrap/form-control/form-control.tmpl-specs/40-file.bemjson.js'),
             ]},
-            require('../blocks.03-bootstrap/form-check/form-check.tmpl-specs/10-checkbox.bemjson.js'),
-            require('../blocks.03-bootstrap/form-check/form-check.tmpl-specs/20-radio.bemjson.js'),
+            {mix: {block: 'row'}, content: [
+              {mix: {block: 'col'}, content: [
+                require('../blocks.03-bootstrap/form-check/form-check.tmpl-specs/10-checkbox.bemjson.js'),
+              ]},
+              {mix: {block: 'col'}, content: [
+                require('../blocks.03-bootstrap/form-check/form-check.tmpl-specs/20-radio.bemjson.js'),
+              ]}
+            ]},
           ]},
         ]}
       ]},
@@ -116,7 +130,21 @@ module.exports = {
       {block: 'card', cls: 'mb-4', content: [
         {elem: 'header', content: 'Кнопки'},
         {elem: 'body', content: [
-
+          {elem: 'title', content: 'Стилизация'},
+          {block: 'row', content: [
+            require('../blocks.03-bootstrap/btn/btn.tmpl-specs/10-all-styled.bemjson.js').map((btn)=>{
+              return {block: 'col', mix: {block: 'mb-2'}, content: [
+                btn
+              ]}
+            }),
+            {block: 'col'},{block: 'col'},{block: 'col'},{block: 'col'}
+          ]},
+          {elem: 'title', content: 'Размеры'},
+          require('../blocks.03-bootstrap/btn/btn.tmpl-specs/20-all-size.bemjson.js').map((btn)=>{
+            return {mix: {block: 'mb-2'}, content: [
+              btn
+            ]}
+          }),
         ]}
       ]},
 
