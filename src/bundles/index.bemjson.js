@@ -2,14 +2,15 @@ module.exports = {
   block: 'page',
   title: 'Пустая странциа',
   content: [
+    {block: 'h', size: '1', content: 'Блок "h"'},
+    {
+      block: 'bh-br',
+      content: 'bh-br',
+    },
     require('./common/header.bemjson.js'),
-    {mix: {block: 'container'}, content: [
-        
-      {block: 'bh', content: [
-        {block: 'h', size: '2', content: 'Этот блок сгененрирован на js 2'}
-      ]}
-        
-    ]},
-    require('./common/footer.bemjson.js')
-  ]
+    {
+      mix: {block: 'container'}, content: [],
+    },
+    require('./common/footer.bemjson.js'),
+  ],
 };
