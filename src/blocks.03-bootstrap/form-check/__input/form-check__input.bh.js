@@ -2,7 +2,7 @@ module.exports = function (bh) {
     bh.match('form-check__input', function (ctx, json) {
         ctx
             .tag('input')
-            .cls('form-check-input')
+            .mix({block: 'form-check-input'})
             .attrs({
                 id: ctx.tParam('ID'),
                 type: 'checkbox',

@@ -3,7 +3,7 @@ module.exports = function (bh) {
         ctx
             .tag('figure')
             .content([
-                {block: 'img', cls: 'figure-img img-fluid', src: json.src, content: json.alt},
+                {block: 'img', mix: [{block: 'figure-img'}, {block: 'img-fluid'}], src: json.src, content: json.alt},
                 {elem: 'caption', content: ctx.content()}
             ], ctx.isSimple(ctx.content()));
     })

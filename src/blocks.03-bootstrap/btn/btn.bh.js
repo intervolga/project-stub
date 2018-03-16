@@ -3,10 +3,10 @@ module.exports = function (bh) {
         ctx
             .tag('a')
             .mod('styled', 'primary')
-            .cls([
-                ctx.mod('size') && 'btn-'+ctx.mod('size'),
-                ctx.mod('styled') && 'btn-'+ctx.mod('styled')
-            ].join(' '));
+            .mix([
+                ctx.mod('styled') && {block: 'btn-'+ctx.mod('styled')},
+                ctx.mod('size') && {block: 'btn-'+ctx.mod('size')}
+            ])
 
         switch (ctx.tag()) {
             case 'div': break;

@@ -6,7 +6,7 @@ module.exports = {
     {mix: {block: 'container'}, content: [
       {block: 'h', size: 1, content: 'Типография'},
 
-      {block: 'card', cls: 'mb-4', content: [
+      {block: 'card', mix: {block: 'mb-4'}, content: [
         {elem: 'header', content: 'Глобальные настройки'},
         {elem: 'body', content: [
           {elem: 'title', content: 'Основной текст'},
@@ -27,21 +27,21 @@ module.exports = {
         ]}
       ]},
 
-      {block: 'card', cls: 'mb-4', content: [
+      {block: 'card', mix: {block: 'mb-4'}, content: [
         {elem: 'header', content: 'Используемые цвета'},
         {elem: 'body', content: [
           {block: 'palette'}
         ]}
       ]},
 
-      {block: 'card', cls: 'mb-4', content: [
+      {block: 'card', mix: {block: 'mb-4'}, content: [
         {elem: 'header', content: 'Заголовки типографии'},
         {elem: 'body', content: [
           require('../blocks.02-common/h/h.tmpl-specs/10-all.bemjson.js'),
         ]}
       ]},
 
-      {block: 'card', cls: 'mb-4', content: [
+      {block: 'card', mix: {block: 'mb-4'}, content: [
         {elem: 'header', content: 'Заголовки привлекающие внимание'},
         {elem: 'body', content: [
           {block: 'h', size: 1, cls: 'display-1', content: 'Заголовок 1'},
@@ -51,7 +51,7 @@ module.exports = {
         ]}
       ]},
 
-      {block: 'card', cls: 'mb-4', content: [
+      {block: 'card', mix: {block: 'mb-4'}, content: [
         {elem: 'header', content: 'Встроенные текстовые элементы'},
         {elem: 'body', content: [
           {block: 'list', content: [
@@ -65,7 +65,7 @@ module.exports = {
         ]}
       ]},
 
-      {block: 'card', cls: 'mb-4', content: [
+      {block: 'card', mix: {block: 'mb-4'}, content: [
         {elem: 'header', content: 'Списки'},
         {elem: 'body', content: [
           {mix: {block: 'row'}, content: [
@@ -79,36 +79,14 @@ module.exports = {
         ]}
       ]},
 
-      {block: 'card', cls: 'mb-4', content: [
+      {block: 'card', mix: {block: 'mb-4'}, content: [
         {elem: 'header', content: 'Таблицы'},
         {elem: 'body', content: [
-          {block: 'table', cls: 'table-bordered', content: [
-            {elem: 'thead', cls: 'thead-light', content:[
-              {elem: 'tr', content: [
-                {elem: 'th', content: 'Заголовок'},
-                {elem: 'th', content: 'Заголовок'},
-                {elem: 'th', content: 'Заголовок'}
-              ]}
-            ]},
-            {elem: 'tbody', content: [
-              {elem: 'tr', content: [
-                {elem: 'td', content: 'Ячейка'},
-                {elem: 'td', content: 'Ячейка'},
-                {elem: 'td', content: 'Ячейка'}
-              ]}
-            ]},
-            {elem: 'tfoot', content: [
-              {elem: 'tr', content: [
-                {elem: 'td', content: 'Ячейка'},
-                {elem: 'td', content: 'Ячейка'},
-                {elem: 'td', content: 'Ячейка'}
-              ]}
-            ]}
-          ]}
+          require('../blocks.03-bootstrap/table/table.tmpl-specs/10-all.bemjson.js')
         ]}
       ]},
 
-      {block: 'card', cls: 'mb-4', content: [
+      {block: 'card', mix: {block: 'mb-4'}, content: [
         {elem: 'header', content: 'Изображения в тексте'},
         {elem: 'body', content: [
           {block: 'img', attrs: {align: 'left'}, src: 'http://placehold.it/400x200', content: 'my image'},
@@ -120,11 +98,11 @@ module.exports = {
         ]}
       ]},
 
-      {block: 'card', cls: 'mb-4', content: [
+      {block: 'card', mix: {block: 'mb-4'}, content: [
         {elem: 'header', content: 'Изображения с подписью (Figures)'},
         {elem: 'body', content: [
           {block: 'row', content: [
-            require('../blocks.02-common/figure/figure.tmpl-specs/10-all.bemjson.js').map((figure)=>{
+            require('../blocks.03-bootstrap/figure/figure.tmpl-specs/10-all.bemjson.js').map((figure)=>{
               return {block: 'col', content: [
                 figure
               ]}
@@ -133,7 +111,7 @@ module.exports = {
         ]}
       ]},
 
-      {block: 'card', cls: 'mb-4', content: [
+      {block: 'card', mix: {block: 'mb-4'}, content: [
         {elem: 'header', content: 'Элементы формы'},
         {elem: 'body', content: [
           {block: 'form', content: [
@@ -161,7 +139,7 @@ module.exports = {
         ]}
       ]},
 
-      {block: 'card', cls: 'mb-4', content: [
+      {block: 'card', mix: {block: 'mb-4'}, content: [
         {elem: 'header', content: 'Кнопки'},
         {elem: 'body', content: [
           {elem: 'title', content: 'Стилизация'},
@@ -180,12 +158,27 @@ module.exports = {
             ]}
           }),
         ]}
-      ]},
+      ]},  
 
 
-      {block: 'card', cls: 'mb-4', content: [
+      {block: 'card', mix: {block: 'mb-4'}, content: [
         {elem: 'header', content: 'Модальное окно'},
         {elem: 'body', content: [
+            
+          {block: 'modal', attrs: {style: 'position: relative; display: block;'}, content: [
+            {elem: 'header', content: [
+              {elem: 'title', content: 'Заголовок модального окна'},
+              {tag: 'button', mix: {block: 'close'}, content: '&times;'}
+            ]},
+            {elem: 'body', content: [
+              {tag: 'p', content: 'Содержимое модального окна'}
+            ]},
+            {elem: 'footer', content: [
+              {block: 'btn', content: 'Закрыть'},
+              {block: 'btn', mods: {styled: 'secondary'}, content: 'Сохранить'},
+            ]}
+          ]}
+            
         ]}
       ]},
 
