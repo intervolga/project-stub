@@ -92,9 +92,12 @@ module.exports = {
       {block: 'card', cls: 'mb-4', content: [
         {elem: 'header', content: 'Изображения с подписью (Figures)'},
         {elem: 'body', content: [
-          {block: 'figure', content: [
-            {block: 'img', src: 'http://placehold.it/400x200', content: 'my image'},
-            {elem: 'caption', content: 'Подпись к изображению'}
+          {block: 'row', content: [
+            require('../blocks.02-common/figure/figure.tmpl-specs/10-all.bemjson.js').map((figure)=>{
+              return {block: 'col', content: [
+                figure
+              ]} 
+            }),
           ]}
         ]}
       ]},
