@@ -13,7 +13,7 @@ const ImageminPlugin = require('imagemin-webpack-plugin').default;
 const imageminMozjpeg = require('imagemin-mozjpeg');
 const pkg = require('./package.json');
 
-require('@babel/polyfill');
+// require('@babel/polyfill');
 
 const isProd = 'production' === process.env.NODE_ENV;
 const srcPath = path.resolve(__dirname, 'src', 'bundles');
@@ -25,12 +25,10 @@ const bemJsonEntries = fs.readdirSync(srcPath)
   });
 const moduleEntries = bemJsonEntries.reduce(function(res, curr) {
   if (isProd) {
-    // res['merged'] = res['merged'] || ['@babel/polyfill'];
     res['merged'] = res['merged'] || [];
     res['merged'].push(curr);
   } else {
     const key = path.basename(curr, '.js');
-    // res[key] = ['@babel/polyfill', curr];
     res[key] = curr;
   }
 
@@ -211,9 +209,13 @@ module.exports = {
                 options: {
                   outputStyle: 'expanded',
                   data: '@import ' + JSON.stringify(
-                    path.join(__dirname, 'src', 'sass-globals',
-                      'sass-globals.scss')) + ';',
-                  // includePaths: [srcPath],
+                    path.join(
+                      __dirname,
+                      'src',
+                      'sass-globals',
+                      'sass-globals.scss'
+                    )
+                  ) + ';',
                   sourceMap: isProd,
                 },
               },
@@ -222,7 +224,7 @@ module.exports = {
         },
       ],
 
-      // Bootstrap
+      // Bootstrap TODO - check if it required
       {
         test: /\/node_modules\/bootstrap\/dist\/js\/umd\//,
         use: 'imports-loader?jQuery=jquery',
@@ -236,6 +238,7 @@ module.exports = {
           {
             loader: '@intervolga/bembh-loader',
             options: {
+              client: true,
               bhFilename: require.resolve('@intervolga/bh-ext'),
             },
           },
@@ -254,7 +257,6 @@ module.exports = {
           '@intervolga/eval-loader',
         ],
       },
-      // TODO: babel polyfills in prod for node_modules
       {
         test: /\.js$/,
         exclude: /node_modules/,
@@ -269,9 +271,7 @@ module.exports = {
                   browsers: pkg.browserslist,
                   forceAllTransforms: isProd,
                 },
-                  modules: false,
-                  useBuiltIns: 'usage',
-                  // debug: !isProd,
+                useBuiltIns: 'usage',
               }],
             ],
             plugins: ['@babel/transform-runtime'],
@@ -341,15 +341,12 @@ module.exports = {
       // TODO: will it work with BEM?
       // new webpack.optimize.CommonsChunkPlugin({
       //   name: 'merged',
-      //   filename: '[name]-chunk.js',
-      //   children: true,
-      //   async: true,
-      //   minChunks: 2,
+      //   // filename: '[name]-chunk.js',
+      //   // children: true,
+      //   // async: true,
+      //   // minChunks: 2,
       // }),
-      new webpack.optimize.UglifyJsPlugin({
-        sourceMap: true,
-        extractComments: true,
-      }),
+
       new OptimizeCssnanoPlugin({
         sourceMap: true,
         cssnanoOptions: {
@@ -383,6 +380,31 @@ module.exports = {
       }),
     ] : [],
   ],
+
+  optimization: {
+    // minimize: isProd,
+    splitChunks: {
+      cacheGroups: {
+        // default: {
+        //   minChunks: 2,
+        //   priority: -20,
+        //   reuseExistingChunk: true,
+        // },
+        // vendors: {
+        //   test: /[\\/]node_modules[\\/]/,
+        //   priority: -10,
+        // },
+        bh: {
+          test: /bh\.js$/,
+          name: 'merged.bh',
+          // chunks: 'async',
+          // enforce: true
+          priority: 0,
+        },
+      },
+    },
+    // runtimeChunk: true
+  },
 
   devServer: {
     contentBase: path.resolve(__dirname, isProd ? 'dist' : 'build'),
