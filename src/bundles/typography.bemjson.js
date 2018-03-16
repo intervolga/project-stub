@@ -9,11 +9,20 @@ module.exports = {
       {block: 'card', cls: 'mb-4', content: [
         {elem: 'header', content: 'Глобальные настройки'},
         {elem: 'body', content: [
+          {elem: 'title', content: 'Основной текст'},
           {block: 'list', content: [
             'Семейство шрифтов для основного текста: "PT Sans", Helvetica, Arial, sans-serif',
+            'Базовый размер шрифта для основного текста на сайте 16px',
+            'Базовый размер межстрочечного интервала для основного текста на сайте 24px/16px ~ 1.5',
+            'Растояние между параграфами текста / вертикальный ритм: 16px',
+          ]},
+          {elem: 'title', content: 'Заголовки'},
+          {block: 'list', content: [
             'Семейство шрифтов для заголовков текста: "Open Sans", Helvetica, Arial, sans-serif',
-            'Базовый размер шрифта для основного текста на сайте 14px',
-            'Базовый размер межстрочечного интервала для основного текста на сайте 21px === 1.5',
+            'Межстрочечный интервал для заголвоков: 1.2',
+            'Цвет текста заголовков по умолчанию: #0000',
+            'Отступ от текста до заголовка: 16px',
+            'Отступ от заголовка до текста: 8px',
           ]},
         ]}
       ]},
@@ -73,7 +82,29 @@ module.exports = {
       {block: 'card', cls: 'mb-4', content: [
         {elem: 'header', content: 'Таблицы'},
         {elem: 'body', content: [
-
+          {block: 'table', cls: 'table-bordered', content: [
+            {elem: 'thead', cls: 'thead-light', content:[
+              {elem: 'tr', content: [
+                {elem: 'th', content: 'Заголовок'},
+                {elem: 'th', content: 'Заголовок'},
+                {elem: 'th', content: 'Заголовок'}
+              ]}
+            ]},
+            {elem: 'tbody', content: [
+              {elem: 'tr', content: [
+                {elem: 'td', content: 'Ячейка'},
+                {elem: 'td', content: 'Ячейка'},
+                {elem: 'td', content: 'Ячейка'}
+              ]}
+            ]},
+            {elem: 'tfoot', content: [
+              {elem: 'tr', content: [
+                {elem: 'td', content: 'Ячейка'},
+                {elem: 'td', content: 'Ячейка'},
+                {elem: 'td', content: 'Ячейка'}
+              ]}
+            ]}
+          ]}
         ]}
       ]},
 
@@ -155,7 +186,6 @@ module.exports = {
       {block: 'card', cls: 'mb-4', content: [
         {elem: 'header', content: 'Модальное окно'},
         {elem: 'body', content: [
-
         ]}
       ]},
 

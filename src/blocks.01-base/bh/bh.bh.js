@@ -5,7 +5,7 @@ module.exports = function (bh) {
             .attr('id', ctx.tParam('ID'))
             .content([
                 {tag: 'script', attrs: {async: true}, content: ctx.process(
-                    'document.addEventListener("DOMContentLoaded", function () {%ID%.outerHTML = BH.apply(%JSON%)});'
+                    'document.addEventListener("DOMContentLoaded", function(){window.getBH(function(BH) {%ID%.outerHTML = BH.apply(%JSON%)})});'
                         .replace('%ID%', ctx.tParam('ID'))
                         .replace('%JSON%', JSON.stringify(ctx.content()))
                 )}

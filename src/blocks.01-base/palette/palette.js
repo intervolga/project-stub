@@ -1,13 +1,15 @@
 document.addEventListener("DOMContentLoaded", (e)=>{
+    var colors = ['primary', 'secondary', 'success', 'info', 'warning', 'danger', 'light', 'dark'];
     var style = getComputedStyle(document.body);
-    var colors = ['indigo', 'purple', 'pink', 'red', 'orange', 'yellow', 'green', 'teal', 'cyan', 'white', 'gray', 'gray-dark', 'primary', 'secondary', 'success', 'info', 'warning', 'danger', 'light', 'dark'];
-
-    var images = colors.map((color)=>{
-        let hex = style.getPropertyValue('--'+color).replace('#', '').trim();
-        return {block: 'img', src: 'http://placehold.it/100x100/'+hex+'?text='+color};
+    var items = colors.map((name)=>{
+        let hex = style.getPropertyValue('--'+name).trim();
+        return {elem: 'item', attrs: {'style': 'background:'+hex}, content: {elem: 'title', content: ['$'+name, ': ', hex]}};
     });
-    var palettes = document.getElementsByClassName('palette');
-    for (var i = 0; i < palettes.length; i++) {
-        palettes[i].innerHTML = BH.apply(images);
-    }
+
+    window.getBH((BH)=>{
+        var palettes = document.getElementsByClassName('palette');
+        for (var i = 0; i < palettes.length; i++) {
+            palettes[i].outerHTML = BH.apply({block: 'palette', content: items})
+        }
+    });
 })
