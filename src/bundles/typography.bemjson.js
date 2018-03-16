@@ -4,37 +4,41 @@ module.exports = {
   content: [
     require('./common/header.bemjson.js'),
     {mix: {block: 'container'}, content: [
+      {block: 'h', size: 1, content: 'Типография'},
 
-      {mix: {block: 'mb-5'}, content: [
-        {block: 'h', size: '2', content: 'Блок "h"'},
-        {mix: {block: 'mb-2'}, content: [
-          require('../blocks.02-common/h/h.tmpl-specs/10-all.bemjson.js'),
-        ]},
-      ]},
+      {block: 'card', content: [
+        {elem: 'header', content: 'Featured'},
+        {elem: 'body', content: [
 
-      {mix: {block: 'mb-5'}, content: [
-        {block: 'h', size: '2', content: 'Блок "list"'},
-        {mix: {block: 'mb-2'}, content: [
-          require('../blocks.02-common/list/list.tmpl-specs/10-default.bemjson.js'),
-        ]},
-        {mix: {block: 'mb-2'}, content: [
-          require('../blocks.02-common/list/list.tmpl-specs/20-numerical.bemjson.js'),
         ]}
       ]},
+      {block: 'h', size: 2, content: 'Глобальные настройки'},
+      {block: 'list', content: [
+        'Семейство шрифтов для основного текста: "PT Sans", Helvetica, Arial, sans-serif',
+        'Семейство шрифтов для заголовков текста: "Open Sans", Helvetica, Arial, sans-serif',
+        'Базовый размер шрифта для основного текста на сайте 14px',
+        'Базовый размер межстрочечного интервала для основного текста на сайте 21px === 1.5',
+      ]},
 
+      {tag: 'hr'},
 
-      {mix: {block: 'mb-5'}, content: [
-        {block: 'h', size: '2', content: 'Блок "form-control"'},
-        {mix: {block: 'mb-2'}, content: [
-          require('../blocks.03-bootstrap/form-control/form-control.tmpl-specs/10-default.bemjson.js')
-        ]},
-        {mix: {block: 'mb-2'}, content: [
-          require('../blocks.03-bootstrap/form-control/form-control.tmpl-specs/20-select.bemjson.js')
-        ]},
-        {mix: {block: 'mb-2'}, content: [
-          require('../blocks.03-bootstrap/form-control/form-control.tmpl-specs/30-textarea.bemjson.js')
-        ]}
-      ]}
+      {block: 'h', size: 2, content: 'Используемые цвета'},
+      {block: 'p', content: 'Список цветов используемых на сайте'},
+
+      {tag: 'hr'},
+
+      {block: 'h', size: 2, content: 'Заголовки'},
+      require('../blocks.02-common/h/h.tmpl-specs/10-all.bemjson.js'),
+
+      {tag: 'hr'},
+
+      {block: 'h', size: 2, content: ''},
+      {block: 'h', size: 2, content: ''},
+      {block: 'h', size: 2, content: ''},
+      {block: 'h', size: 2, content: ''},
+      {block: 'h', size: 2, content: ''},
+      {block: 'h', size: 2, content: ''}
+
     ]},
     require('./common/footer.bemjson.js')
   ]
