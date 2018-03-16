@@ -102,9 +102,13 @@ module.exports = {
               require('../blocks.03-bootstrap/form-control/form-control.tmpl-specs/20-select.bemjson.js'),
             ]},
             {mix: {block: 'form-group'}, content: [
-              require('../blocks.03-bootstrap/form-control/form-control.tmpl-specs/30-textarea.bemjson.js')
+              require('../blocks.03-bootstrap/form-control/form-control.tmpl-specs/30-textarea.bemjson.js'),
             ]},
-            {block: 'form-check', content: 'Check me out'}
+            {mix: {block: 'form-group'}, content: [
+              require('../blocks.03-bootstrap/form-control/form-control.tmpl-specs/40-file.bemjson.js'),
+            ]},
+            require('../blocks.03-bootstrap/form-check/form-check.tmpl-specs/10-checkbox.bemjson.js'),
+            require('../blocks.03-bootstrap/form-check/form-check.tmpl-specs/20-radio.bemjson.js'),
           ]},
         ]}
       ]},
