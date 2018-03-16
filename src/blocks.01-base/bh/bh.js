@@ -6,6 +6,7 @@ BH.setOptions({
     xhtml: false
 });
 
+require('../../blocks.02-common/img/img.bh.js')(BH);
 require('../../blocks.02-common/h/h.bh.js')(BH);
 require('../../blocks.03-bootstrap/container/container.bh.js')(BH);
 

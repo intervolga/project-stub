@@ -21,7 +21,7 @@ module.exports = {
       {block: 'card', cls: 'mb-4', content: [
         {elem: 'header', content: 'Используемые цвета'},
         {elem: 'body', content: [
-
+          {block: 'palette'}
         ]}
       ]},
 
@@ -96,7 +96,7 @@ module.exports = {
             require('../blocks.02-common/figure/figure.tmpl-specs/10-all.bemjson.js').map((figure)=>{
               return {block: 'col', content: [
                 figure
-              ]} 
+              ]}
             }),
           ]}
         ]}
