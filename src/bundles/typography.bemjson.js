@@ -49,7 +49,7 @@ module.exports = {
           {block: 'h', size: 1, cls: 'display-3', content: 'Заголовок 3'},
           {block: 'h', size: 1, cls: 'display-4', content: 'Заголовок 4'},
         ]}
-      ]},
+      ]}, 
 
       {block: 'card', mix: {block: 'mb-4'}, content: [
         {elem: 'header', content: 'Встроенные текстовые элементы'},
@@ -159,8 +159,7 @@ module.exports = {
           }),
         ]}
       ]},  
-
-
+        
       {block: 'card', mix: {block: 'mb-4'}, content: [
         {elem: 'header', content: 'Модальное окно'},
         {elem: 'body', content: [
@@ -168,7 +167,7 @@ module.exports = {
           {block: 'modal', attrs: {style: 'position: relative; display: block;'}, content: [
             {elem: 'header', content: [
               {elem: 'title', content: 'Заголовок модального окна'},
-              {tag: 'button', mix: {block: 'close'}, content: '&times;'}
+              {elem: 'close'}
             ]},
             {elem: 'body', content: [
               {tag: 'p', content: 'Содержимое модального окна'}
@@ -181,7 +180,6 @@ module.exports = {
             
         ]}
       ]},
-
     ]},
     require('./common/footer.bemjson.js')
   ]

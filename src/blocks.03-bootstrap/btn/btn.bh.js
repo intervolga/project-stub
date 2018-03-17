@@ -3,13 +3,10 @@ module.exports = function (bh) {
         ctx
             .tag('a')
             .mod('styled', 'primary')
-            .mix([
-                ctx.mod('styled') && {block: 'btn-'+ctx.mod('styled')},
-                ctx.mod('size') && {block: 'btn-'+ctx.mod('size')}
-            ])
+            .mix({block: 'btn-'+ctx.mod('styled')})
+            .mix({block: !!ctx.mod('size') && 'btn-'+ctx.mod('size')});
 
         switch (ctx.tag()) {
-            case 'div': break;
             case 'a':
                 ctx.attrs({
                     role: 'button',
@@ -21,11 +18,15 @@ module.exports = function (bh) {
                 ctx.attrs({
                     type: 'submit',
                     value: ctx.content() 
-                }).content(false, false);
+                }).content(false, true);
                 break;
-                
-            default:
+
+            case 'button':
                 ctx.attr('type', 'button');
+                break;
+
+            default:
+                ctx.attr('role', 'button');
         }
     })
 }
