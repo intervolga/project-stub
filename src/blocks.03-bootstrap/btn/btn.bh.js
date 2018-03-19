@@ -2,9 +2,7 @@ module.exports = function (bh) {
     bh.match('btn', function (ctx, json) {
         ctx
             .tag('a')
-            .mod('styled', 'primary')
-            .mix({block: 'btn-'+ctx.mod('styled')})
-            .mix({block: !!ctx.mod('size') && 'btn-'+ctx.mod('size')});
+            .cls('btn-primary');
 
         switch (ctx.tag()) {
             case 'a':

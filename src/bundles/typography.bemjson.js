@@ -173,8 +173,8 @@ module.exports = {
               {tag: 'p', content: 'Содержимое модального окна'}
             ]},
             {elem: 'footer', content: [
-              {block: 'btn', content: 'Закрыть'},
-              {block: 'btn', mods: {styled: 'secondary'}, content: 'Сохранить'},
+              {block: 'btn', cls: 'btn-secondary', content: 'Закрыть'},
+              {block: 'btn', content: 'Сохранить'},
             ]}
           ]}
             
