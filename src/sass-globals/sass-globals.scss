@@ -1,3 +1,6 @@
 @import "~bootstrap/scss/functions";
 @import "~bootstrap/scss/variables";
 @import "~bootstrap/scss/mixins";
+@import "~sass-rem/rem";
+
+$rem-baseline: 16px;
