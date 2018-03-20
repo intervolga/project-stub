@@ -1,6 +1,7 @@
 module.exports = function (bh) {
     bh.match('img_lazy', function (ctx, json) {
-        ctx.cls('lazyload')
+        ctx
+            .mix({block: 'lazyload'})
             .attrs({
                 'src': ctx.process({block: '1px'}),
                 'data-src': json.src,

@@ -1,0 +1,5 @@
+({
+    shouldDeps: [
+        {elem: ['dialog', 'content']}
+    ],
+})

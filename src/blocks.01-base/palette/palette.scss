@@ -1,0 +1,11 @@
+.palette {
+  &__item{
+    padding: .5rem;
+  }
+  &__title{
+    padding: .5rem;
+    background-color: $white;
+    width: 200px;
+    font-weight: $font-weight-bold;
+  }
+}

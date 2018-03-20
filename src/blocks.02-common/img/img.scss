@@ -1,0 +1,16 @@
+img {
+  &[align="left"]{margin-right: $grid-gutter-width}
+  &[align="right"]{margin-left: $grid-gutter-width}
+  &[align],
+  &:not([class]){
+    max-width: 50%;
+    &:not(:last-child){
+      margin-bottom: $paragraph-margin-bottom;
+    }
+    @include media-breakpoint-down(md) {
+      float: none;
+      max-width: 100%;
+      margin: auto;
+    }
+  }
+}

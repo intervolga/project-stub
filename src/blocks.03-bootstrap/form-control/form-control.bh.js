@@ -10,8 +10,8 @@ module.exports = function (bh) {
             case 'select':
                 ctx.content(
                     ctx.content().map((item)=>{
-                        if(typeof item !== 'string') return item;
-                        return {tag: 'option', content: item}
+                        if(ctx.isSimple(item)) return {tag: 'option', attrs: {value: ctx.generateId()}, content: item};
+                        return item;
                     }),
                     true
                 ); break;
