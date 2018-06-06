@@ -234,6 +234,26 @@ module.exports = {
       {
         test: /\.bemjson\.js$/,
         use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              cacheDirectory: !isProd,
+              babelrc: false,
+              presets: [
+                ['@babel/preset-env', {
+                  targets: {
+                    browsers: pkg.browserslist,
+                    forceAllTransforms: isProd,
+                  },
+                  useBuiltIns: 'usage',
+                }],
+              ],
+              plugins: [
+                '@babel/transform-runtime',
+                '@babel/plugin-syntax-dynamic-import',
+              ],
+            },
+          },
           '@intervolga/bemrequire-loader',
           {
             loader: '@intervolga/bembh-loader',
@@ -274,7 +294,10 @@ module.exports = {
                 useBuiltIns: 'usage',
               }],
             ],
-            plugins: ['@babel/transform-runtime'],
+            plugins: [
+              '@babel/transform-runtime',
+              '@babel/plugin-syntax-dynamic-import',
+            ],
           },
         },
       },
